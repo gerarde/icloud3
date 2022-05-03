@@ -5093,12 +5093,12 @@ class Icloud3:#(DeviceScanner):
                     zone_selected      = zone
                     iosapp_zone_msg    = ""
 
-                #If closer than 200m, keep zone name for ios app state override  f
-                #ios app is in a Zone but dist is still outside a zone's radius
-                elif (zone_iosapp and zone == zone_iosapp and zone_dist < .2):
-                    zone_selected_dist = zone_dist
-                    zone_selected      = zone
-                    iosapp_zone_msg    = " (Using iOSApp State)"
+                # #If closer than 200m, keep zone name for ios app state override  f
+                # #ios app is in a Zone but dist is still outside a zone's radius
+                # elif (zone_iosapp and zone == zone_iosapp and zone_dist < .2):
+                #     zone_selected_dist = zone_dist
+                #     zone_selected      = zone
+                #     iosapp_zone_msg    = " (Using iOSApp State)"
 
             if (instr(zone, STATIONARY)):
                 zones_msg += self.zone_to_display.get(STATIONARY)

@@ -3418,11 +3418,11 @@ class Icloud3:#(DeviceScanner):
                         interval = self.inzone_interval_secs.get(devicename)
                         interval_method="1-EnterZone"
 
-                #battery < 5% and near zone
-                elif (battery5_flag and dist_from_zone_km <= 1):
-                    interval = 15
-                    dir_of_travel = 'Battery 5%'
-                    interval_method="2-Battery5%"
+                # #battery < 5% and near zone
+                # elif (battery5_flag and dist_from_zone_km <= 1):
+                #     interval = 15
+                #     dir_of_travel = 'Battery 5%'
+                #     interval_method="2-Battery5%"
 
                 #battery < 10%
                 elif (battery10_flag):
@@ -3430,19 +3430,19 @@ class Icloud3:#(DeviceScanner):
                     dir_of_travel = 'Battery <10%'
                     interval_method="2-Battery10%"
 
-                #entered 'near_zone' zone if close to HOME and last is NOT_HOME
-                elif (near_zone_flag and wasnot_inzone_flag and
-                        calc_dist_from_zone_km < 2):
-                    interval = 15
-                    dir_of_travel = 'NearZone'
-                    interval_method="2-EnterNearZone"
+                # #entered 'near_zone' zone if close to HOME and last is NOT_HOME
+                # elif (near_zone_flag and wasnot_inzone_flag and
+                #         calc_dist_from_zone_km < 2):
+                #     interval = 15
+                #     dir_of_travel = 'NearZone'
+                #     interval_method="2-EnterNearZone"
 
-                #entered 'near_zone' zone if close to HOME and last is NOT_HOME
-                elif (near_zone_flag and was_inzone_flag
-                        and calc_dist_from_zone_km < 2):
-                    interval = 15
-                    dir_of_travel = 'NearZone'
-                    interval_method="2-EnterNearZone"
+                # #entered 'near_zone' zone if close to HOME and last is NOT_HOME
+                # elif (near_zone_flag and was_inzone_flag
+                #         and calc_dist_from_zone_km < 2):
+                #     interval = 15
+                #     dir_of_travel = 'NearZone'
+                #     interval_method="2-EnterNearZone"
 
                 #exited HOME zone
                 elif (not_inzone_flag and was_inzone_home_flag):
@@ -7758,23 +7758,23 @@ class Icloud3:#(DeviceScanner):
                                 self.zone_radius_m.get(HOME))
         zone_radius_accuracy_m = zone_radius_m + self.gps_accuracy_threshold
 
-        msg = ''
-        if (dist_from_zone_m > zone_radius_m
-                and self.got_exit_trigger_flag.get(devicename) is False
-                and instr(zone, STATIONARY) is False):
-            if dist_from_zone_m < zone_radius_accuracy_m:
-                self.poor_gps_flag[devicename] = True
-
-                msg = ("Outside Zone and No Exit Zone trigger, "
-                    f"Keeping in zone > Zone-{zone}, "
-                    f"Distance-{dist_from_zone_m}m, "
-                    f"DiscardDist-{zone_radius_m}m to {zone_radius_accuracy_m}m ")
-                return True, msg
-            else:
-                msg = ("Outside Zone and No Exit Zone trigger but outside threshold, "
-                    f"Exiting zone > Zone-{zone}, "
-                    f"Distance-{dist_from_zone_m}m, "
-                    f"DiscardDist-{zone_radius_m}m to {zone_radius_accuracy_m}m ")
+        # msg = ''
+        # if (dist_from_zone_m > zone_radius_m
+        #         and self.got_exit_trigger_flag.get(devicename) is False
+        #         and instr(zone, STATIONARY) is False):
+        #     if dist_from_zone_m < zone_radius_accuracy_m:
+        #         self.poor_gps_flag[devicename] = True
+        #
+        #         msg = ("Outside Zone and No Exit Zone trigger, "
+        #             f"Keeping in zone > Zone-{zone}, "
+        #             f"Distance-{dist_from_zone_m}m, "
+        #             f"DiscardDist-{zone_radius_m}m to {zone_radius_accuracy_m}m ")
+        #         return True, msg
+        #     else:
+        #         msg = ("Outside Zone and No Exit Zone trigger but outside threshold, "
+        #             f"Exiting zone > Zone-{zone}, "
+        #             f"Distance-{dist_from_zone_m}m, "
+        #             f"DiscardDist-{zone_radius_m}m to {zone_radius_accuracy_m}m ")
 
         return False, ''
 

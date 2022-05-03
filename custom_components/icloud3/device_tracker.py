@@ -3446,7 +3446,7 @@ class Icloud3:#(DeviceScanner):
 
                 #exited HOME zone
                 elif (not_inzone_flag and was_inzone_home_flag):
-                    interval = 240
+                    interval = 120
                     dir_of_travel = AWAY_FROM
                     interval_method="2-ExitHomeZone"
 
@@ -3485,12 +3485,12 @@ class Icloud3:#(DeviceScanner):
                 interval_method = "3-Stationary"
                 log_msg = f"Zone-{zone}"
 
-            #battery <= 10% and not near home ==> stationary time
-            elif (battery10_flag and dist_from_zone_km > 1):
-                interval = self.stat_zone_inzone_interval
-                interval_method="3-Battery10%"
-                dir_of_travel = "Battery <10%"
-                log_msg = (f"Battery-{battery}%")
+            # #battery <= 10% and not near home ==> stationary time
+            # elif (battery10_flag and dist_from_zone_km > 1):
+            #     interval = self.stat_zone_inzone_interval
+            #     interval_method="3-Battery10%"
+            #     dir_of_travel = "Battery <10%"
+            #     log_msg = (f"Battery-{battery}%")
 
             elif poor_location_gps_flag:
                 interval = self._get_interval_for_error_retry_cnt(devicename, POOR_LOC_GPS_CNT)
@@ -3504,10 +3504,10 @@ class Icloud3:#(DeviceScanner):
                 interval_method = '3-InHomeZone'
                 log_msg = f"Zone-{zone}"
 
-            elif zone == 'near_zone':
-                interval = 15
-                interval_method = '3-NearZone'
-                log_msg = f"Zone-{zone}, Dir-{dir_of_travel}"
+            # elif zone == 'near_zone':
+            #     interval = 15
+            #     interval_method = '3-NearZone'
+            #     log_msg = f"Zone-{zone}, Dir-{dir_of_travel}"
 
             #in another zone and inzone time > travel time
             elif (inzone_flag
@@ -3524,44 +3524,47 @@ class Icloud3:#(DeviceScanner):
                     dir_of_travel = NOT_SET
                 interval_method = '3-NeedInfo'
                 log_msg = f"ZoneLeft-{zone}"
-
-            elif dist_from_zone_km < 2.5 and self.went_3km.get(devicename):
-                interval = 15             #1.5 mi=real close and driving
-                interval_method = '3-<2.5km'
-
-            elif dist_from_zone_km < 3.5:      #2 mi=30 sec
-                interval = 30
-                interval_method = '3-<3.5km'
-
-            elif waze_time_from_zone > 5 and waze_interval > 0:
-                interval = waze_interval
-                interval_method = '3-WazeTime'
-                log_msg = f"TimeFmHome-{waze_time_from_zone}"
-
-            elif dist_from_zone_km < 5:        #3 mi=1 min
-                interval = 60
-                interval_method = '3-<5km'
-
-            elif dist_from_zone_km < 8:        #5 mi=2 min
+            elif dist_from_zone_km < 2:
                 interval = 120
-                interval_method = '3-<8km'
+                interval_method = '3-<2km'
+            #
+            # elif dist_from_zone_km < 2.5 and self.went_3km.get(devicename):
+            #     interval = 15             #1.5 mi=real close and driving
+            #     interval_method = '3-<2.5km'
+            #
+            # elif dist_from_zone_km < 3.5:      #2 mi=30 sec
+            #     interval = 30
+            #     interval_method = '3-<3.5km'
+            #
+            # elif waze_time_from_zone > 5 and waze_interval > 0:
+            #     interval = waze_interval
+            #     interval_method = '3-WazeTime'
+            #     log_msg = f"TimeFmHome-{waze_time_from_zone}"
+            #
+            # elif dist_from_zone_km < 5:        #3 mi=1 min
+            #     interval = 60
+            #     interval_method = '3-<5km'
+            #
+            # elif dist_from_zone_km < 8:        #5 mi=2 min
+            #     interval = 120
+            #     interval_method = '3-<8km'
+            #
+            # elif dist_from_zone_km < 12:       #7.5 mi=3 min
+            #     interval = 180
+            #     interval_method = '3-<12km'
+            #
+            #
+            # elif dist_from_zone_km < 20:       #12 mi=10 min
+            #     interval = 600
+            #     interval_method = '3-<20km'
+            #
+            # elif dist_from_zone_km < 40:       #25 mi=15 min
+            #     interval = 900
+            #     interval_method = '3-<40km'
 
-            elif dist_from_zone_km < 12:       #7.5 mi=3 min
-                interval = 180
-                interval_method = '3-<12km'
-
-
-            elif dist_from_zone_km < 20:       #12 mi=10 min
-                interval = 600
-                interval_method = '3-<20km'
-
-            elif dist_from_zone_km < 40:       #25 mi=15 min
-                interval = 900
-                interval_method = '3-<40km'
-
-            elif dist_from_zone_km > 150:      #90 mi=1 hr
-                interval = 3600
-                interval_method = '3->150km'
+            # elif dist_from_zone_km > 150:      #90 mi=1 hr
+            #     interval = 3600
+            #     interval_method = '3->150km'
 
             else:
                 interval = calc_interval
@@ -3597,28 +3600,28 @@ class Icloud3:#(DeviceScanner):
                     else:
                         dir_of_travel = NOT_SET
 
-            if (dir_of_travel in ('', AWAY_FROM)
-                    and interval < 180
-                    and interval > 30):
-                interval = 180
-                interval_method += ',6-Away(<3min)'
-
-            elif (dir_of_travel == AWAY_FROM
-                    and not self.distance_method_waze_flag):
-                interval_multiplier = 2    #calc-increase timer
-                interval_method += ',6-Away(Calc)'
-            elif (dir_of_travel == NOT_SET
-                    and interval > 180):
-                interval = 180
-                interval_method += ',6->180s'
-
-            #15-sec interval (close to zone) and may be going into a stationary zone,
-            #increase the interval
-            elif (interval == 15
-                    and devicename in self.stat_zone_timer
-                    and self.this_update_secs >= self.stat_zone_timer.get(devicename)+45):
-                interval = 30
-                interval_method += ',6-StatTimer+45'
+            # if (dir_of_travel in ('', AWAY_FROM)
+            #         and interval < 180
+            #         and interval > 30):
+            #     interval = 180
+            #     interval_method += ',6-Away(<3min)'
+            #
+            # elif (dir_of_travel == AWAY_FROM
+            #         and not self.distance_method_waze_flag):
+            #     interval_multiplier = 2    #calc-increase timer
+            #     interval_method += ',6-Away(Calc)'
+            # elif (dir_of_travel == NOT_SET
+            #         and interval > 180):
+            #     interval = 180
+            #     interval_method += ',6->180s'
+            #
+            # #15-sec interval (close to zone) and may be going into a stationary zone,
+            # #increase the interval
+            # elif (interval == 15
+            #         and devicename in self.stat_zone_timer
+            #         and self.this_update_secs >= self.stat_zone_timer.get(devicename)+45):
+            #     interval = 30
+            #     interval_method += ',6-StatTimer+45'
 
         except Exception as err:
             attrs_msg = self._internal_error_msg(fct_name, err, 'SetStatZone')

@@ -3500,7 +3500,7 @@ class Icloud3:#(DeviceScanner):
             elif (inzone_home_flag
                     or (dist_from_zone_km < .05
                     and dir_of_travel == 'towards')):
-                interval = self.inzone_interval_secs.get(devicename)
+                interval = 3600
                 interval_method = '3-InHomeZone'
                 log_msg = f"Zone-{zone}"
 

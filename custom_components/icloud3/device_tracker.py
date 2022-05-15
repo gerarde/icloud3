@@ -3414,9 +3414,9 @@ class Icloud3:#(DeviceScanner):
                         interval = self._get_interval_for_error_retry_cnt(devicename, POOR_LOC_GPS_CNT)
                         interval_method = '1-OldLocPoorGPS'
 
-                    else:
+                    elif (inzone_home_flag):
                         interval = self.inzone_interval_secs.get(devicename)
-                        interval_method="1-EnterZone"
+                        interval_method="1-EnterHomeZone"
 
                 # #battery < 5% and near zone
                 # elif (battery5_flag and dist_from_zone_km <= 1):
@@ -3510,11 +3510,11 @@ class Icloud3:#(DeviceScanner):
             #     log_msg = f"Zone-{zone}, Dir-{dir_of_travel}"
 
             #in another zone and inzone time > travel time
-            elif (inzone_flag
-                    and self.inzone_interval_secs.get(devicename) > waze_interval):
-                interval = self.inzone_interval_secs.get(devicename)
-                interval_method = '3-InZone'
-                log_msg = f"Zone-{zone}"
+            # elif (inzone_flag
+            #         and self.inzone_interval_secs.get(devicename) > waze_interval):
+            #     interval = self.inzone_interval_secs.get(devicename)
+            #     interval_method = '3-InZone'
+            #     log_msg = f"Zone-{zone}"
 
             elif dir_of_travel in ('left_zone', NOT_SET):
                 interval = 150

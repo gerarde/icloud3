@@ -1,3 +1,13 @@
+
+
+# About this fork
+
+This custom component is fantastic, but I am using it for a different purpose than originally intended.
+
+My use case is to be able to help with tracking an elderly person with dementia, who likes to wander away from his home.  He keeps his Apple Watch on at all times, so we can use it to geofence dangerous areas, and this also helps ensure that we know where he is at all times.
+
+---------
+
 # Welcome to iCloud3 v2.4!
 
 [![CurrentVersion](https://img.shields.io/badge/Current_Version-v2.4.7-blue.svg)](https://github.com/gcobb321/icloud3)

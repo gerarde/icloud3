@@ -3364,7 +3364,7 @@ class Icloud3:#(DeviceScanner):
                 waze_interval = 0
             interval = 15
             interval_multiplier = 1
-            interval_str = ''
+            interval_str = 'X-Default'
 
             battery10_flag       = (battery > 0 and battery <= 10)
             battery5_flag        = (battery > 0 and battery <= 5)
@@ -3441,6 +3441,7 @@ class Icloud3:#(DeviceScanner):
                 # elif (near_zone_flag and was_inzone_flag
                 #         and calc_dist_from_zone_km < 2):
                 #     interval = 15
+
                 #     dir_of_travel = 'NearZone'
                 #     interval_method="2-EnterNearZone"
 
@@ -3469,7 +3470,7 @@ class Icloud3:#(DeviceScanner):
             elif (self.poor_gps_flag.get(devicename)
                    and inzone_flag
                    and self.check_gps_accuracy_inzone_flag):
-                interval = 300      #poor accuracy, try again in 5 minutes
+                interval = 120
                 interval_method = '3-PoorGPSinZone'
 
             elif self.poor_gps_flag.get(devicename):
@@ -3500,7 +3501,7 @@ class Icloud3:#(DeviceScanner):
             elif (inzone_home_flag
                     or (dist_from_zone_km < .05
                     and dir_of_travel == 'towards')):
-                interval = 3600
+                interval = 120
                 interval_method = '3-InHomeZone'
                 log_msg = f"Zone-{zone}"
 
@@ -3517,7 +3518,7 @@ class Icloud3:#(DeviceScanner):
             #     log_msg = f"Zone-{zone}"
 
             elif dir_of_travel in ('left_zone', NOT_SET):
-                interval = 150
+                interval = 120
                 if inzone_home_flag:
                     dir_of_travel = AWAY_FROM
                 else:
